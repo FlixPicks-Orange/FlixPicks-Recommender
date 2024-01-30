@@ -68,7 +68,7 @@ def get_user_ids(database_path):
     return user_ids
 
 
-def findmatch(rules, user_id):
+def findmatch(rules):
     #Query database for a list of all watch history
 
     #Make a structure of that
@@ -76,11 +76,16 @@ def findmatch(rules, user_id):
     #If structure contains antecedent check for consequent
 
     #
+    
+    #For Demo
+    data = ['Batman' , 'Avengers']
+    data = list(data)
     for rule in rules:
         antecedent, consequent, confidence = rule
         antecedent_list = list(antecedent)
-        print(antecedent)
-    
+        if antecedent_list == data:
+            print(consequent)
+            print('--------------')
 
 
     
