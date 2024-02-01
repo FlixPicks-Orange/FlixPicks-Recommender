@@ -67,42 +67,71 @@ def get_user_ids(database_path):
     #print(user_ids)
     return user_ids
 
+#Creates a list of titles of a specific users history
+def get_user_titles(database_path, user_id):
+    conn = sqlite3.connect(database_path)
+    c = conn.cursor()
+    query = "SELECT m.title FROM movies m JOIN watch_history wh ON m.id = wh.movie_id WHERE wh.user_id = ?"
+    c.execute(query, (user_id,))
+    result = c.fetchall()
+    movies = [row[0] for row in result]
+    #print(movies)
+    conn.close()
+    return movies
+#Makes a combination list of that user, limiting to groups of 2, change max_range if you want to change this
+def get_user_combinations(titles):
+    allcombinations = [f"['{title}']" for title in titles]
+    max_range = len(titles)+1
+    if max_range > 3:
+        max_range = 3
+    for r in range(2, max_range):
+        allcombinations.extend(list(combinations(titles, r)))
+    #for combination in allcombinations:
+        #print(combination)
+    return allcombinations, titles
 
-def findmatch(rules):
-    #Query database for a list of all watch history
 
+def findmatch(rules, user_id,database_path):
+    #Query database for a list of all watch history 
     #Make a structure of that
+    user_data, user_titles = get_user_combinations(get_user_titles(database_path, user_id))
+   
 
     #If structure contains antecedent check for consequent
-
-    #
-    
-    #For Demo
-    data = ['Batman' , 'Avengers']
-    data = list(data)
+    reccomendations = []
     for rule in rules:
+        
         antecedent, consequent, confidence = rule
-        antecedent_list = list(antecedent)
-        if antecedent_list == data:
-            print(consequent)
-            print('--------------')
+       
+        for combination in user_data:
+            
+            if set(antecedent) == set(combination):
+                
+                reccomendations.extend(consequent)
 
+    return reccomendations,user_titles
 
-    
-
+def filter_out_watched(reccomendations, user_titles):
+    reccomendations = set(reccomendations)
+    watched_titles = set(user_titles)
+    return list(reccomendations - watched_titles)
 
 def recommendmovie():
     movierecommendations = []
     database_path = 'databasev1.db'
     itemSetList = load_data(database_path)
+    freqItemSet, rules = apriori(itemSetList, minSup=.3, minConf=.4)
+    movierecommendations, user_titles = findmatch(rules, 9, database_path)
+    movierecommendations = filter_out_watched(movierecommendations, user_titles)
+
+    #print("rules are")
+    #print(rules)
+    #print("Freq Item set")
+    #print(freqItemSet)
     #print("ItemSetlist is")
     #print(itemSetList)
-    freqItemSet, rules = apriori(itemSetList, minSup=.5, minConf=.5)
-    findmatch(rules)
-    print("rules are")
-    print(rules)
-    print("Freq Item set")
-    print(freqItemSet)
+    
+    
     return movierecommendations
 
-recommendmovie()
+print(recommendmovie())

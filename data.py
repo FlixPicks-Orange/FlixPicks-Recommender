@@ -161,7 +161,7 @@ morewatch = [
         (6, 'Anchorman', 16),
         (6, 'Jurassic Park', 17),
         (6, 'Casablanca', 18),
-                (5, 'Batman', 1),
+        (5, 'Batman', 1),
         (7, 'Avengers', 5),
         (7, 'La La Land', 10),
         (7, 'The Matrix', 11),
@@ -173,5 +173,11 @@ morewatch = [
         (8, 'Casablanca', 18),
 ]
 
-insertwatchhistory(dbname, morewatch)
+#insertwatchhistory(dbname, morewatch)
 
+
+data = [
+    (9, 'Batman', 1),
+    (9, 'Avengers', 5)
+]
+insertwatchhistory(dbname, data)
