@@ -44,6 +44,8 @@ def load_data(database_path):
     return titleset
 
 
+
+
 #Queries database for all user_ids in watch_history to be able to get each transaction
 #Gets the users, currently prints them as well
 def get_user_ids(database_path):
@@ -78,6 +80,8 @@ def get_user_titles(database_path, user_id):
     #print(movies)
     conn.close()
     return movies
+
+
 #Makes a combination list of that user, limiting to groups of 2, change max_range if you want to change this
 def get_user_combinations(titles):
     allcombinations = [f"['{title}']" for title in titles]
