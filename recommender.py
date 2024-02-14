@@ -19,7 +19,7 @@ def load_data(database_path):
     
     dataset = [(tuple(row[1].split(','))) for row in rows]
     #Test Print
-    #print(dataset)
+    print(dataset)
     query = "SELECT title FROM movies WHERE id = ? "
     #Title set is all the users TUPLES combined
     titleset = []
@@ -39,7 +39,7 @@ def load_data(database_path):
         titleset.append(tuple(titles))
 
     #Test Print
-    #print(titleset)
+    print(titleset)
     conn.close()
     return titleset
 
@@ -57,13 +57,13 @@ def get_user_ids(database_path):
     
     user_ids = [row[0] for row in rows]
     #print(user_ids)
-    names_of_users = []
+    """    names_of_users = []
  
     for user in user_ids:
         c.execute("SELECT name FROM user WHERE id = ?", (int(user),))
         name = c.fetchone()
         names_of_users.append(name)
-    #print(names_of_users)
+    #print(names_of_users)"""
     conn.close()
     #Test Print
     #print(user_ids)
@@ -102,7 +102,7 @@ def findmatch(rules, user_id,database_path):
    
 
     #If structure contains antecedent check for consequent
-    reccomendations = []
+    recommendations = []
     for rule in rules:
         
         antecedent, consequent, confidence = rule
@@ -111,31 +111,18 @@ def findmatch(rules, user_id,database_path):
             
             if set(antecedent) == set(combination):
                 
-                reccomendations.extend(consequent)
+                recommendations.extend(consequent)
 
-    return reccomendations,user_titles
+    return recommendations,user_titles
 
-def filter_out_watched(reccomendations, user_titles):
-    reccomendations = set(reccomendations)
+def filter_out_watched(recommendations, user_titles):
+    recommendations = set(recommendations)
     watched_titles = set(user_titles)
-    return list(reccomendations - watched_titles)
+    return list(recommendations - watched_titles)
 
-def recommendmovie():
-    movierecommendations = []
-    database_path = 'databasev1.db'
-    itemSetList = load_data(database_path)
-    freqItemSet, rules = apriori(itemSetList, minSup=.3, minConf=.4)
-    movierecommendations, user_titles = findmatch(rules, 9, database_path)
-    movierecommendations = filter_out_watched(movierecommendations, user_titles)
+def recommended_was_watched(user):
+    watched_content = []
+    recommended_content = []
+    #I need to set everything that is in both recommended and watched to true 
 
-    #print("rules are")
-    #print(rules)
-    #print("Freq Item set")
-    #print(freqItemSet)
-    #print("ItemSetlist is")
-    #print(itemSetList)
-    
-    
-    return movierecommendations
 
-print(recommendmovie())

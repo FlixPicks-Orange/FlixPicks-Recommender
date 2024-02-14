@@ -17,7 +17,8 @@ c.execute(
     CREATE TABLE IF NOT EXISTS user(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT,
-    email TEXT UNIQUE
+    email TEXT UNIQUE,
+    last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
 
 '''
@@ -53,6 +54,20 @@ c.execute(
     '''
 )
 
+c.execute(
+    '''
+    CREATE TABLE IF NOT EXISTS recommended_content(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    movie_id INTEGER,
+    watched BOOLEAN DEFAULT FALSE,
+    recommended_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+    FOREIGN KEY (movie_id) REFERENCES movies(id)
+   
+    )
+    '''
+)
 
 
 

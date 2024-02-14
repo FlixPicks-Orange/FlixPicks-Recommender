@@ -1,4 +1,4 @@
-from app import filter_out_watched
+from recommender import filter_out_watched
 import unittest
 
 class TestFilterOutWatched(unittest.TestCase):
