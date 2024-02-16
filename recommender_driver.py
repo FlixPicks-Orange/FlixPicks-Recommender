@@ -18,7 +18,7 @@ def recommendmovie():
     movierecommendation = []
     for user in user_list():
         #Hunter, change the rules call in find match to reflect the dictionary you make
-        movierecommendation, user_titles = recommender.findmatch(rules, user, database_path)
+        movierecommendation, user_titles = recommender.findmatch(rule_dictionary, user, database_path)
         movierecommendation = recommender.filter_out_watched(movierecommendation, user_titles)
         movierecommendations.append(movierecommendation)
 
@@ -28,13 +28,23 @@ def recommendmovie():
     print(movierecommendations)
     #return movierecommendations
 
+
+# The function takes a list of rules, where each rule consists of antecedent, consequent, and confidence, 
+# and transforms it into a dictionary (rule_dictionary). In this dictionary, the antecedents serve as keys, 
+# and the corresponding values are lists containing the associated consequents.
 def make_rules_to_dictionary(rules):
     rule_dictionary = {}
-    #Hunter, fill out the logic here turning our rules into a dictionary
-    #having the antecedents be the key and the consequents in the value as a list/set 
+    
+    # Iterate through each rule in the list of rules
+    for antecedent, consequent, confidence in rules:
+        # Check if the antecedent is not in the rule dictionary
+        if antecedent not in rule_dictionary:
+            # If not, create a new entry with an empty list for consequents
+            rule_dictionary[antecedent] = []
+        
+        # Append the consequent to the list of consequents for the antecedent
+        rule_dictionary[antecedent].append((consequent, confidence))
 
-    #each run in rules contains the values antecedent, consequent, and confidence
-    #Really the dictionary should just be the key of the antecedent and the value list of the consequents
     return rule_dictionary
 
 def user_list():    
