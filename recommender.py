@@ -98,8 +98,17 @@ def get_user_combinations(titles):
 def findmatch(rules, user_id,database_path):
     #Query database for a list of all watch history 
     #Make a structure of that
+    #Hunter, this does NOT need changed
     user_data, user_titles = get_user_combinations(get_user_titles(database_path, user_id))
-   
+    #End don't touch
+    
+    #Hunter, update this logic to reflect using a dictionary
+    #This should allow us to get rid of this nested loop
+    #The combination here reflects the key to the dictionary, it should match an antecedent, when it does that means two users have watched the same x amount of shows
+    #That leads to the values of the dictionary, or consequent, the theme of what content they would also like to watch based on the apriori algorithm
+    #Store the values retrieved all into a single list or set (probably set to get rid of duplicates)
+    #This should help improve the efficiency of the code
+
 
     #If structure contains antecedent check for consequent
     recommendations = []

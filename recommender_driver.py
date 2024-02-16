@@ -7,6 +7,7 @@ import time
 database_path = 'databasev1.db'
 minSup = .3
 minConf = .4
+#Hunter, you can change this repeater value to speed up the intervals in which the code runs has no impact on what you are working on but lower the number the better, fractions of a minute .25 = 15 seconds
 repeater = .25
 testvar = datetime.datetime.now()
 def recommendmovie():
@@ -16,7 +17,7 @@ def recommendmovie():
     freqItemSet, rules = recommender.apriori(itemSetList, minSup, minConf)
     movierecommendation = []
     for user in user_list():
-
+        #Hunter, change the rules call in find match to reflect the dictionary you make
         movierecommendation, user_titles = recommender.findmatch(rules, user, database_path)
         movierecommendation = recommender.filter_out_watched(movierecommendation, user_titles)
         movierecommendations.append(movierecommendation)
@@ -27,7 +28,16 @@ def recommendmovie():
     print(movierecommendations)
     #return movierecommendations
 
-def user_list():
+def make_rules_to_dictionary(rules):
+    rule_dictionary = {}
+    #Hunter, fill out the logic here turning our rules into a dictionary
+    #having the antecedents be the key and the consequents in the value as a list/set 
+
+    #each run in rules contains the values antecedent, consequent, and confidence
+    #Really the dictionary should just be the key of the antecedent and the value list of the consequents
+    return rule_dictionary
+
+def user_list():    
     conn = sqlite3.connect(database_path)
     c = conn.cursor()
     userlist = [1,2,3,4,5,6,7,8,9]
