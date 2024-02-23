@@ -96,13 +96,34 @@ def get_user_combinations(titles):
     return allcombinations, titles
 
 
-def findmatch(rules, user_id,database_path):
+def findmatch(rule_dictionary, user_id,database_path):
     #Query database for a list of all watch history 
     #Make a structure of that
     #Hunter, this does NOT need changed
     user_data, user_titles = get_user_combinations(get_user_titles(database_path, user_id))
     #End don't touch
-    
+
+    # NEW CODE
+    # The modification reduces the time complexity from O(n^2) to O(n) by eliminating the nested loop. 
+    # With the modified code, we iterate over the rules once, and for each rule, we find the matching users in user_data using a list comprehension.
+    # If there are matching users, it extends the recommendations list with the consequent and confidence values.
+
+    # Initialize an empty list to store recommendations
+    recommendations = []
+
+    # Iterate over each combination in the user data
+    for combination in user_data:
+        # Check if the combination's antecedent is in the rule dictionary
+        antecedent = tuple(combination)
+        if antecedent in rule_dictionary:
+            # If there is a match, add the consequents to the recommendations list
+            recommendations.extend([(consequent, confidence) for consequent, confidence in rule_dictionary[antecedent]])
+
+    # Return the list of recommendations and the user titles
+    return recommendations, user_titles
+
+
+''' OLD CODE
     #Hunter, update this logic to reflect using a dictionary
     #This should allow us to get rid of this nested loop
     #The combination here reflects the key to the dictionary, it should match an antecedent, when it does that means two users have watched the same x amount of shows
@@ -124,6 +145,9 @@ def findmatch(rules, user_id,database_path):
                 recommendations.extend(consequent)
 
     return recommendations,user_titles
+
+ END OF OLD CODE '''
+
 
 def filter_out_watched(recommendations, user_titles):
     recommendations = set(recommendations)
