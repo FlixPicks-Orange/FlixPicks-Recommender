@@ -3,12 +3,13 @@ import datetime
 import schedule
 import sqlite3
 import time
+import requests, os
 #global db variable
 database_path = 'databasev1.db'
 minSup = .3
 minConf = .4
 #Hunter, you can change this repeater value to speed up the intervals in which the code runs has no impact on what you are working on but lower the number the better, fractions of a minute .25 = 15 seconds
-repeater = .25
+repeater = .15
 testvar = datetime.datetime.now()
 def recommendmovie():
     movierecommendations = []
@@ -22,6 +23,14 @@ def recommendmovie():
         movierecommendation = recommender.filter_out_watched(movierecommendation, user_titles)
         movierecommendations.append(movierecommendation)
 
+        for recommendation in movierecommendation:
+        
+            new_recommendation = {
+                    'user_id' : user,
+                    'movie_id' : 1,
+                    'title' : recommendation
+                }
+            r = requests.post(os.getenv('DB_URL') + "/recommendations", json=new_recommendation)
 
 
 

@@ -2,7 +2,8 @@ from itertools import combinations
 from apriori_python import apriori
 import random
 import sqlite3
-
+import os
+import requests
 #Uses apriori_python 
 
 
