@@ -2,16 +2,14 @@ import api_calls
 import recommender
 import os, requests
 from apriori_python import apriori
-
+import time
 #print(api_calls.get_user_ids())
 
-def get_all():
-    r = requests.get(os.getenv('DB_URL') + "/watch_history")
-    print(r.status_code)
-    if(r.status_code == 200): return r.json()
-    else: return None
-
-print(get_all())
+time.sleep(5)
+user_ids = api_calls.get_user_ids()
+print(user_ids)
+print(api_calls.get_movie_ids())
+print(api_calls.get_user_movie_ids(4))
 """print("movie_ids is:")
 print(api_calls.get_movie_ids())
 
