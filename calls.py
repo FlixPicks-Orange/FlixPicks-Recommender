@@ -37,10 +37,7 @@ def get_movie_ids():
 
 def get_user_movie_ids(user_id):
     movie_ids = []
-    """
-    THIS NEEDS TO BE SWITCHED TO A DIRECT API CALL FOR JUST A USER_IDS WATCH HISTORY
-    """
-    #Gets our request, and builds all the movie_ids to be associated in lists with the proper user
+    
     r = requests.get(os.getenv('DB_URL') + "/watch_history/" + str(user_id))
     print(r.status_code)
     if(r.status_code == 200):

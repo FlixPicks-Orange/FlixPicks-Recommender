@@ -2,11 +2,11 @@ import calls
 import recommender
 import os, requests
 from apriori_python import apriori
-import time
+import time, schedule
 #print(calls.get_user_ids())
 
 time.sleep(5)
-
+repeater = .15
 """print("movie_ids is:")
 print(calls.get_movie_ids())
 
@@ -47,5 +47,9 @@ def recommendmovie():
         if len(movierecommendations) > 0:
             calls.post_recommendations(user, movierecommendations)
 
-recommendmovie()
+schedule.every(repeater).minutes.do(recommendmovie)
+while True:
+    schedule.run_pending()
+    time.sleep(20)
+
         
