@@ -4,7 +4,7 @@ import calls
 
 def findmatch(rules, user):
     allcombinations, movie_ids = get_user_combinations(calls.get_user_movie_ids(user))
-    print(f"All movie_ids are {movie_ids}")
+    #print(f"All movie_ids are {movie_ids}")
     #print(f"all combinations for user {user} are {allcombinations}")
     movie_recommendations = []
     
@@ -17,7 +17,7 @@ def findmatch(rules, user):
     
     return movie_recommendations, movie_ids 
 def get_user_combinations(movie_ids):
-    print(movie_ids)
+    #print(movie_ids)
     allcombinations = []
     max_range = len(movie_ids) + 1
     if max_range > 3:
