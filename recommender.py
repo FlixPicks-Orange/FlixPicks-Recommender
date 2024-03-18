@@ -1,11 +1,10 @@
 from itertools import combinations
 from apriori_python import apriori
-import api_calls
-import api_calls
+import calls
 
 def findmatch(rules, user):
-    allcombinations, movie_ids = get_user_combinations(api_calls.get_user_movie_ids(user))
-    #print(f"All movie_ids are {movie_ids}")
+    allcombinations, movie_ids = get_user_combinations(calls.get_user_movie_ids(user))
+    print(f"All movie_ids are {movie_ids}")
     #print(f"all combinations for user {user} are {allcombinations}")
     movie_recommendations = []
     
@@ -18,6 +17,7 @@ def findmatch(rules, user):
     
     return movie_recommendations, movie_ids 
 def get_user_combinations(movie_ids):
+    print(movie_ids)
     allcombinations = []
     max_range = len(movie_ids) + 1
     if max_range > 3:
@@ -27,8 +27,13 @@ def get_user_combinations(movie_ids):
     return allcombinations, movie_ids
 
 def filter_watched(recommendations, movie_ids):
-    recommendations = set(recommendations)
-    movie_ids = set(movie_ids)
-    return list(recommendations - movie_ids)
+    changed_watched = [int(movie) for movie in movie_ids]
+    set_watched = set(changed_watched)
+    
+    changed_recommendations = [int(movie) for movie in recommendations]
+    set_recommendations = set(changed_recommendations)
+
+    return set_recommendations - set_watched
+
 
 
