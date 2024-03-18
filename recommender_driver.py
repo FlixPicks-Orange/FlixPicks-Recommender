@@ -5,7 +5,7 @@ from apriori_python import apriori
 import time, schedule
 #print(calls.get_user_ids())
 
-time.sleep(5)
+time.sleep(60)
 repeater = .15
 """print("movie_ids is:")
 print(calls.get_movie_ids())
@@ -22,8 +22,8 @@ print(calls.get_user_movie_ids(2))
 print("get users since login is")
 print(calls.get_users_since_login())"""
 
-minSup = .3
-minConf = .4
+minSup = .15
+minConf = .3
 
 
 
