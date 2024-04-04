@@ -1,2 +1,3 @@
 schedule==1.2.1
 apriori_python==1.0.4
+requests==2.31.0

@@ -1,79 +1,55 @@
+import calls 
 import recommender
-import datetime
-import schedule
-import sqlite3
-import time
-#global db variable
-database_path = 'databasev1.db'
-minSup = .3
-minConf = .4
-#Hunter, you can change this repeater value to speed up the intervals in which the code runs has no impact on what you are working on but lower the number the better, fractions of a minute .25 = 15 seconds
-repeater = .25
-testvar = datetime.datetime.now()
+import os, requests
+from apriori_python import apriori
+import time, schedule
+#print(calls.get_user_ids())
+
+time.sleep(60)
+repeater = .15
+"""print("movie_ids is:")
+print(calls.get_movie_ids())
+
+print("get_user_ids is:")
+print(calls.get_user_ids())
+
+print("get_user_movie_ids for 1 is:")
+print(calls.get_user_movie_ids(1))
+
+print("get_user_movie_ids for 2 is:")
+print(calls.get_user_movie_ids(2))
+
+print("get users since login is")
+print(calls.get_users_since_login())"""
+
+minSup = .15
+minConf = .3
+
+
+
 def recommendmovie():
     movierecommendations = []
 
-    itemSetList = recommender.load_data(database_path)
-    freqItemSet, rules = recommender.apriori(itemSetList, minSup, minConf)
-    movierecommendation = []
-    for user in user_list():
-        #Hunter, change the rules call in find match to reflect the dictionary you make
-        movierecommendation, user_titles = recommender.findmatch(rule_dictionary, user, database_path)
-        movierecommendation = recommender.filter_out_watched(movierecommendation, user_titles)
-        movierecommendations.append(movierecommendation)
+    itemSetList = calls.get_movie_ids()
 
-
-
-
-    print(movierecommendations)
-    #return movierecommendations
-
-
-# The function takes a list of rules, where each rule consists of antecedent, consequent, and confidence, 
-# and transforms it into a dictionary (rule_dictionary). In this dictionary, the antecedents serve as keys, 
-# and the corresponding values are lists containing the associated consequents.
-def make_rules_to_dictionary(rules):
-    rule_dictionary = {}
+    freqItemSet, rules = apriori(itemSetList, minSup, minConf)
     
-    # Iterate through each rule in the list of rules
-    for antecedent, consequent, confidence in rules:
-        # Check if the antecedent is not in the rule dictionary
-        if antecedent not in rule_dictionary:
-            # If not, create a new entry with an empty list for consequents
-            rule_dictionary[antecedent] = []
-        
-        # Append the consequent to the list of consequents for the antecedent
-        rule_dictionary[antecedent].append((consequent, confidence))
+    #print(f"Rules are {rules}")
 
-    return rule_dictionary
+    #print(f"Freq item set list is {freqItemSet}")
+    users = calls.get_user_ids()
+    #print(users)
+    for user in users:
+        movierecommendations, movie_ids = recommender.findmatch(rules, user)
+        #print(f"User {user} movie recommendations are {movierecommendations}, their movie_ids are {movie_ids}")
+        movierecommendations = recommender.filter_watched(movierecommendations, movie_ids)
+        #print(f"User {user} movie recommendations after filter are {movierecommendations}, their movie ids are {movie_ids}")
+        if len(movierecommendations) > 0:
+            calls.post_recommendations(user, movierecommendations)
 
-def user_list():    
-    conn = sqlite3.connect(database_path)
-    c = conn.cursor()
-    userlist = [1,2,3,4,5,6,7,8,9]
-    initiallist = recommender.get_user_ids(database_path)
-
-    
-    """  for user in initiallist:
-        c.execute("SELECT last_login FROM user WHERE user_id = ?", user)
-        last_login = c.fetchone()"""
-    time_difference(testvar)
-        
-    #Update the list of users on which to run the algorithm for
-    #logic should check for users who have an updated watch history since last run time
-    conn.close()
-    return userlist
-
-def time_difference(last_login):
-    current_time = datetime.datetime.now()
-    time_difference = current_time - last_login
-    print(current_time)
-    print(last_login)
-    print(time_difference)
-
-
-#A proposed system to run every x minutes
 schedule.every(repeater).minutes.do(recommendmovie)
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(20)
+
+        
