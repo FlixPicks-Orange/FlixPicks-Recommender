@@ -72,3 +72,15 @@ def post_recommendations(user, movieids):
             print(f"succesful, {response}")
         else:
             print(f"failed, {response}")
+
+def get_recommendaitons(user_id):
+    response = requests.get(os.getenv('DB_URL') + "/recommendations/" + str(user_id))
+    recommended_list = []
+    if response.status_code == 200:
+        
+        package = response.json()
+        for entry in package:
+            recommended_list.append(entry['movie_id'])
+    
+    return recommended_list
+    

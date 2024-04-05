@@ -35,5 +35,12 @@ def filter_watched(recommendations, movie_ids):
 
     return set_recommendations - set_watched
 
+def filter_recommended(recommendations, user):
+    previous_recommended = calls.get_recommendaitons(user)
+    set_previousrecommended = set(previous_recommended)
+    set_recommended = set(recommendations)
+
+    return set_recommended - set_previousrecommended
+
 
 

@@ -43,6 +43,7 @@ def recommendmovie():
         movierecommendations, movie_ids = recommender.findmatch(rules, user)
         #print(f"User {user} movie recommendations are {movierecommendations}, their movie_ids are {movie_ids}")
         movierecommendations = recommender.filter_watched(movierecommendations, movie_ids)
+        movierecommendations = recommender.filter_recommended(movierecommendations, user)
         #print(f"User {user} movie recommendations after filter are {movierecommendations}, their movie ids are {movie_ids}")
         if len(movierecommendations) > 0:
             calls.post_recommendations(user, movierecommendations)
